@@ -19,7 +19,8 @@ import {
   Shuffle,
   Layers,
   Download,
-  Sparkles
+  Sparkles,
+  Settings
 } from 'lucide-react';
 import ProductCategorySelector from './ProductCategorySelector';
 import { 
@@ -67,7 +68,6 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
         elements = [];
     }
     
-    // Optimize for selected platform
     elements = optimizeForPlatform(elements, selectedPlatform);
     
     elements.forEach(element => {
@@ -148,36 +148,36 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
   const tabs = [
     { id: 'products', label: 'Products', icon: Layers },
     { id: 'elements', label: 'Elements', icon: Plus },
-    { id: 'properties', label: 'Properties', icon: Palette },
-    { id: 'platform', label: 'Platform', icon: Download },
+    { id: 'properties', label: 'Properties', icon: Settings },
+    { id: 'platform', label: 'Export', icon: Download },
   ];
 
   return (
-    <div className="w-80 bg-slate-800 text-white border-r border-slate-700 flex flex-col">
+    <div className="w-80 bg-white border-r border-slate-200 flex flex-col shadow-lg">
       {/* Header */}
-      <div className="p-4 border-b border-slate-700">
+      <div className="p-6 border-b border-slate-200 bg-gradient-to-r from-purple-50 to-blue-50">
         <div className="flex items-center mb-4">
-          <Button variant="ghost" size="sm" onClick={onBack} className="mr-2">
+          <Button variant="ghost" size="sm" onClick={onBack} className="mr-3 hover:bg-white/50">
             <ArrowLeft className="w-4 h-4" />
           </Button>
-          <h2 className="text-lg font-semibold capitalize">Design Studio</h2>
+          <h2 className="text-xl font-bold text-slate-800">Design Studio</h2>
         </div>
         
         {/* Tab Navigation */}
-        <div className="flex space-x-1 bg-slate-700 rounded-lg p-1">
+        <div className="flex space-x-1 bg-slate-100 rounded-lg p-1">
           {tabs.map((tab) => {
             const IconComponent = tab.icon;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center px-2 py-2 rounded-md text-xs font-medium transition-colors ${
+                className={`flex-1 flex items-center justify-center px-3 py-2.5 rounded-md text-xs font-medium transition-all duration-200 ${
                   activeTab === tab.id
-                    ? 'bg-purple-600 text-white'
-                    : 'text-gray-300 hover:text-white hover:bg-slate-600'
+                    ? 'bg-white text-purple-600 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-800 hover:bg-white/50'
                 }`}
               >
-                <IconComponent className="w-3 h-3 mr-1" />
+                <IconComponent className="w-4 h-4 mr-1.5" />
                 {tab.label}
               </button>
             );
@@ -186,27 +186,27 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
       </div>
 
       {/* Tab Content */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50/50">
         {activeTab === 'products' && (
           <ProductCategorySelector onSelectProduct={handleProductSelect} />
         )}
 
         {activeTab === 'platform' && (
-          <Card className="bg-slate-700 border-slate-600">
+          <Card className="border-slate-200 shadow-sm">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm flex items-center text-white">
-                <Download className="w-4 h-4 mr-2" />
+              <CardTitle className="text-sm flex items-center text-slate-700">
+                <Download className="w-4 h-4 mr-2 text-blue-500" />
                 Platform Optimization
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-gray-300 text-sm">Target Platform</Label>
+                <Label className="text-slate-600 text-sm font-medium">Target Platform</Label>
                 <Select value={selectedPlatform} onValueChange={setSelectedPlatform}>
-                  <SelectTrigger className="bg-slate-600 border-slate-500 text-white">
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-700 mt-1">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white border-slate-200">
                     <SelectItem value="printify">Printify</SelectItem>
                     <SelectItem value="amazon">Amazon Merch</SelectItem>
                     <SelectItem value="shopify">Shopify</SelectItem>
@@ -215,11 +215,13 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
                 </Select>
               </div>
               
-              <div className="text-xs text-gray-400">
-                {selectedPlatform === 'amazon' && 'High contrast designs work best'}
-                {selectedPlatform === 'printify' && 'Colorful, detailed designs recommended'}
-                {selectedPlatform === 'shopify' && 'Professional, branded designs preferred'}
-                {selectedPlatform === 'canva' && 'Template-friendly designs perform well'}
+              <div className="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                <p className="text-xs text-blue-700 font-medium">
+                  {selectedPlatform === 'amazon' && '✨ High contrast designs work best'}
+                  {selectedPlatform === 'printify' && '🎨 Colorful, detailed designs recommended'}
+                  {selectedPlatform === 'shopify' && '🏪 Professional, branded designs preferred'}
+                  {selectedPlatform === 'canva' && '📐 Template-friendly designs perform well'}
+                </p>
               </div>
               
               <Button 
@@ -230,7 +232,7 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
                     dispatch({ type: 'ADD_ELEMENT', element });
                   });
                 }}
-                className="w-full bg-blue-600 hover:bg-blue-700"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
               >
                 <Sparkles className="w-4 h-4 mr-2" />
                 Optimize for {selectedPlatform}
@@ -242,10 +244,10 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
         {activeTab === 'elements' && (
           <>
             {/* Text Tools */}
-            <Card className="bg-slate-700 border-slate-600">
+            <Card className="border-slate-200 shadow-sm">
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm flex items-center text-white">
-                  <Type className="w-4 h-4 mr-2" />
+                <CardTitle className="text-sm flex items-center text-slate-700">
+                  <Type className="w-4 h-4 mr-2 text-green-500" />
                   Add Text
                 </CardTitle>
               </CardHeader>
@@ -254,92 +256,96 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
                   placeholder="Enter text..."
                   value={textInput}
                   onChange={(e) => setTextInput(e.target.value)}
-                  className="bg-slate-600 border-slate-500 text-white"
+                  className="bg-white border-slate-200 text-slate-700"
                 />
-                <Button onClick={addTextElement} className="w-full bg-purple-600 hover:bg-purple-700">
+                <Button onClick={addTextElement} className="w-full bg-green-600 hover:bg-green-700 text-white">
+                  <Plus className="w-4 h-4 mr-2" />
                   Add Text
                 </Button>
               </CardContent>
             </Card>
 
             {/* Shape Tools */}
-            <Card className="bg-slate-700 border-slate-600">
+            <Card className="border-slate-200 shadow-sm">
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm flex items-center text-white">
-                  <Square className="w-4 h-4 mr-2" />
+                <CardTitle className="text-sm flex items-center text-slate-700">
+                  <Square className="w-4 h-4 mr-2 text-purple-500" />
                   Add Shapes
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-3">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => addShapeElement('rectangle')}
-                    className="bg-slate-600 border-slate-500 hover:bg-slate-500"
+                    className="bg-white border-slate-200 hover:bg-slate-50 flex items-center justify-center h-12"
                   >
-                    <Square className="w-4 h-4" />
+                    <Square className="w-5 h-5 text-slate-600" />
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => addShapeElement('circle')}
-                    className="bg-slate-600 border-slate-500 hover:bg-slate-500"
+                    className="bg-white border-slate-200 hover:bg-slate-50 flex items-center justify-center h-12"
                   >
-                    <Circle className="w-4 h-4" />
+                    <Circle className="w-5 h-5 text-slate-600" />
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => addShapeElement('triangle')}
-                    className="bg-slate-600 border-slate-500 hover:bg-slate-500"
+                    className="bg-white border-slate-200 hover:bg-slate-50 flex items-center justify-center h-12"
                   >
-                    <Triangle className="w-4 h-4" />
+                    <Triangle className="w-5 h-5 text-slate-600" />
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => addShapeElement('star')}
-                    className="bg-slate-600 border-slate-500 hover:bg-slate-500"
+                    className="bg-white border-slate-200 hover:bg-slate-50 flex items-center justify-center h-12"
                   >
-                    <Star className="w-4 h-4" />
+                    <Star className="w-5 h-5 text-slate-600" />
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
             {/* Pattern Tools */}
-            <Card className="bg-slate-700 border-slate-600">
+            <Card className="border-slate-200 shadow-sm">
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm flex items-center text-white">
-                  <Palette className="w-4 h-4 mr-2" />
+                <CardTitle className="text-sm flex items-center text-slate-700">
+                  <Palette className="w-4 h-4 mr-2 text-orange-500" />
                   Add Patterns
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => addPatternElement('stripes')}
-                    className="w-full bg-slate-600 border-slate-500 hover:bg-slate-500"
+                    className="w-full bg-white border-slate-200 hover:bg-slate-50 justify-start"
                   >
+                    <div className="w-4 h-4 mr-2 bg-gradient-to-r from-orange-400 to-orange-600 rounded"></div>
                     Stripes
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => addPatternElement('dots')}
-                    className="w-full bg-slate-600 border-slate-500 hover:bg-slate-500"
+                    className="w-full bg-white border-slate-200 hover:bg-slate-50 justify-start"
                   >
+                    <div className="w-4 h-4 mr-2 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
                     Dots
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => addPatternElement('gradient')}
-                    className="w-full bg-slate-600 border-slate-500 hover:bg-slate-500"
+                    className="w-full bg-white border-slate-200 hover:bg-slate-50 justify-start"
                   >
+                    <div className="w-4 h-4 mr-2 bg-gradient-to-r from-purple-400 to-pink-600 rounded"></div>
                     Gradient
                   </Button>
                 </div>
@@ -349,69 +355,75 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
         )}
 
         {activeTab === 'properties' && selectedElement && (
-          <Card className="bg-slate-700 border-slate-600">
+          <Card className="border-slate-200 shadow-sm">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm flex items-center text-white">
-                <Palette className="w-4 h-4 mr-2" />
+              <CardTitle className="text-sm flex items-center text-slate-700">
+                <Settings className="w-4 h-4 mr-2 text-indigo-500" />
                 Element Properties
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               {selectedElement.type === 'text' && (
                 <>
                   <div>
-                    <Label className="text-gray-300 text-sm">Text Content</Label>
+                    <Label className="text-slate-600 text-sm font-medium">Text Content</Label>
                     <Input
                       value={selectedElement.content || ''}
                       onChange={(e) => updateSelectedElement({ content: e.target.value })}
-                      className="bg-slate-600 border-slate-500 text-white"
+                      className="bg-white border-slate-200 text-slate-700 mt-1"
                     />
                   </div>
                   <div>
-                    <Label className="text-gray-300 text-sm">Font Size: {selectedElement.fontSize}</Label>
+                    <Label className="text-slate-600 text-sm font-medium">
+                      Font Size: {selectedElement.fontSize}px
+                    </Label>
                     <Slider
                       value={[selectedElement.fontSize || 24]}
                       onValueChange={([value]) => updateSelectedElement({ fontSize: value })}
                       max={72}
                       min={8}
                       step={1}
-                      className="mt-2"
+                      className="mt-3"
                     />
                   </div>
                 </>
               )}
               
               <div>
-                <Label className="text-gray-300 text-sm">Color</Label>
+                <Label className="text-slate-600 text-sm font-medium">Color</Label>
                 <Input
                   type="color"
                   value={selectedElement.color || '#000000'}
                   onChange={(e) => updateSelectedElement({ color: e.target.value })}
-                  className="bg-slate-600 border-slate-500 h-10"
+                  className="bg-white border-slate-200 h-12 mt-1"
                 />
               </div>
               
               <div>
-                <Label className="text-gray-300 text-sm">Opacity: {Math.round((selectedElement.opacity || 1) * 100)}%</Label>
+                <Label className="text-slate-600 text-sm font-medium">
+                  Opacity: {Math.round((selectedElement.opacity || 1) * 100)}%
+                </Label>
                 <Slider
                   value={[selectedElement.opacity || 1]}
                   onValueChange={([value]) => updateSelectedElement({ opacity: value })}
                   max={1}
                   min={0}
                   step={0.1}
-                  className="mt-2"
+                  className="mt-3"
                 />
               </div>
               
               <div>
-                <Label className="text-gray-300 text-sm">Rotation: {selectedElement.rotation || 0}°</Label>
+                <Label className="text-slate-600 text-sm font-medium">
+                  Rotation: {selectedElement.rotation || 0}°
+                </Label>
                 <Slider
                   value={[selectedElement.rotation || 0]}
                   onValueChange={([value]) => updateSelectedElement({ rotation: value })}
                   max={360}
                   min={-360}
                   step={1}
-                  className="mt-2"
+                  className="mt-3"
                 />
               </div>
               
@@ -419,13 +431,23 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
                 onClick={deleteSelectedElement}
                 variant="destructive"
                 size="sm"
-                className="w-full"
+                className="w-full bg-red-600 hover:bg-red-700 text-white"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
                 Delete Element
               </Button>
             </CardContent>
           </Card>
+        )}
+
+        {activeTab === 'properties' && !selectedElement && (
+          <div className="text-center py-8">
+            <div className="w-16 h-16 mx-auto bg-slate-100 rounded-full flex items-center justify-center mb-4">
+              <Settings className="w-8 h-8 text-slate-400" />
+            </div>
+            <h3 className="text-sm font-medium text-slate-600 mb-2">No Element Selected</h3>
+            <p className="text-xs text-slate-500">Click on an element in the canvas to edit its properties.</p>
+          </div>
         )}
       </div>
     </div>

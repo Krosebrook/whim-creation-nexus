@@ -17,8 +17,8 @@ const Index = () => {
 
   return (
     <DesignProvider>
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-        <div className="flex h-screen">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        <div className="flex h-screen w-full">
           <DesignTools 
             category={selectedCategory || ''}
             onBack={handleBackToCategories}
