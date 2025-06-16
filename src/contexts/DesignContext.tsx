@@ -1,6 +1,8 @@
 
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
 import { DesignElement, DesignState } from '@/types/design';
+import { useUndoRedo } from '@/hooks/useUndoRedo';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 type DesignAction =
   | { type: 'ADD_ELEMENT'; element: DesignElement }
@@ -8,7 +10,8 @@ type DesignAction =
   | { type: 'DELETE_ELEMENT'; id: string }
   | { type: 'SELECT_ELEMENT'; id: string | null }
   | { type: 'CLEAR_CANVAS' }
-  | { type: 'SET_CANVAS_SIZE'; width: number; height: number };
+  | { type: 'SET_CANVAS_SIZE'; width: number; height: number }
+  | { type: 'RESTORE_STATE'; state: DesignState };
 
 const initialState: DesignState = {
   elements: [],
@@ -54,6 +57,8 @@ function designReducer(state: DesignState, action: DesignAction): DesignState {
         canvasWidth: action.width,
         canvasHeight: action.height,
       };
+    case 'RESTORE_STATE':
+      return action.state;
     default:
       return state;
   }
@@ -62,15 +67,36 @@ function designReducer(state: DesignState, action: DesignAction): DesignState {
 interface DesignContextType {
   state: DesignState;
   dispatch: React.Dispatch<DesignAction>;
+  canUndo: boolean;
+  canRedo: boolean;
+  undo: () => void;
+  redo: () => void;
 }
 
 const DesignContext = createContext<DesignContextType | undefined>(undefined);
 
 export const DesignProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(designReducer, initialState);
+  
+  const handleStateChange = (newState: DesignState) => {
+    dispatch({ type: 'RESTORE_STATE', state: newState });
+  };
+
+  const { canUndo, canRedo, undo, redo, pushState } = useUndoRedo(state, handleStateChange);
+
+  // Track state changes for undo/redo
+  useEffect(() => {
+    pushState(state);
+  }, [state.elements, state.canvasWidth, state.canvasHeight]);
+
+  // Setup keyboard shortcuts
+  useKeyboardShortcuts({
+    onUndo: undo,
+    onRedo: redo,
+  });
 
   return (
-    <DesignContext.Provider value={{ state, dispatch }}>
+    <DesignContext.Provider value={{ state, dispatch, canUndo, canRedo, undo, redo }}>
       {children}
     </DesignContext.Provider>
   );
