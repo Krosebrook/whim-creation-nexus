@@ -11,7 +11,12 @@ import {
   Palette, 
   Plus,
   Star,
-  Wand2
+  Wand2,
+  Image,
+  Minus,
+  Diamond,
+  Heart,
+  Hexagon
 } from 'lucide-react';
 import { useDesign } from '@/contexts/DesignContext';
 
@@ -43,8 +48,8 @@ const ElementTools: React.FC = () => {
     setTextInput('');
   };
 
-  const addShapeElement = (shapeType: 'rectangle' | 'circle' | 'triangle' | 'star') => {
-    const colors = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
+  const addShapeElement = (shapeType: 'rectangle' | 'circle' | 'triangle' | 'star' | 'line' | 'diamond' | 'heart' | 'hexagon') => {
+    const colors = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     
     const element = {
@@ -52,8 +57,8 @@ const ElementTools: React.FC = () => {
       type: 'shape' as const,
       x: 150,
       y: 150,
-      width: 100,
-      height: 100,
+      width: shapeType === 'line' ? 150 : 100,
+      height: shapeType === 'line' ? 5 : 100,
       rotation: 0,
       opacity: 1,
       color: randomColor,
@@ -63,8 +68,8 @@ const ElementTools: React.FC = () => {
     dispatch({ type: 'ADD_ELEMENT', element });
   };
 
-  const addPatternElement = (patternType: 'stripes' | 'dots' | 'gradient') => {
-    const colors = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
+  const addPatternElement = (patternType: 'stripes' | 'dots' | 'gradient' | 'checkerboard' | 'waves') => {
+    const colors = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     
     const element = {
@@ -78,6 +83,23 @@ const ElementTools: React.FC = () => {
       opacity: 1,
       color: randomColor,
       patternType,
+    };
+    
+    dispatch({ type: 'ADD_ELEMENT', element });
+  };
+
+  const addImagePlaceholder = () => {
+    const element = {
+      id: generateId(),
+      type: 'image' as const,
+      x: 120,
+      y: 120,
+      width: 200,
+      height: 150,
+      rotation: 0,
+      opacity: 1,
+      color: '#e5e7eb',
+      content: 'Image Placeholder',
     };
     
     dispatch({ type: 'ADD_ELEMENT', element });
@@ -130,7 +152,11 @@ const ElementTools: React.FC = () => {
               { type: 'rectangle', icon: Square, label: 'Rectangle' },
               { type: 'circle', icon: Circle, label: 'Circle' },
               { type: 'triangle', icon: Triangle, label: 'Triangle' },
-              { type: 'star', icon: Star, label: 'Star' }
+              { type: 'star', icon: Star, label: 'Star' },
+              { type: 'line', icon: Minus, label: 'Line' },
+              { type: 'diamond', icon: Diamond, label: 'Diamond' },
+              { type: 'heart', icon: Heart, label: 'Heart' },
+              { type: 'hexagon', icon: Hexagon, label: 'Hexagon' }
             ].map(({ type, icon: Icon, label }) => (
               <Button
                 key={type}
@@ -161,7 +187,9 @@ const ElementTools: React.FC = () => {
             {[
               { type: 'stripes', label: 'Diagonal Stripes', gradient: 'from-orange-400 to-red-500' },
               { type: 'dots', label: 'Polka Dots', gradient: 'from-blue-400 to-cyan-500' },
-              { type: 'gradient', label: 'Color Gradient', gradient: 'from-purple-400 to-pink-500' }
+              { type: 'gradient', label: 'Color Gradient', gradient: 'from-purple-400 to-pink-500' },
+              { type: 'checkerboard', label: 'Checkerboard', gradient: 'from-gray-400 to-gray-600' },
+              { type: 'waves', label: 'Wave Pattern', gradient: 'from-teal-400 to-blue-500' }
             ].map(({ type, label, gradient }) => (
               <Button
                 key={type}
@@ -175,6 +203,29 @@ const ElementTools: React.FC = () => {
               </Button>
             ))}
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Image Tools */}
+      <Card className="border-none shadow-lg bg-gradient-to-br from-white to-blue-50/30">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-sm flex items-center text-gray-700">
+            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+              <Image className="w-4 h-4 text-blue-600" />
+            </div>
+            Add Images
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Button
+            variant="outline"
+            onClick={addImagePlaceholder}
+            className="w-full bg-white/80 border-blue-200 hover:bg-blue-50 hover:border-blue-300 justify-start transition-all duration-200"
+          >
+            <Image className="w-4 h-4 mr-3 text-blue-600" />
+            <span className="text-gray-700">Add Image Placeholder</span>
+            <Plus className="w-3 h-3 ml-auto text-blue-500" />
+          </Button>
         </CardContent>
       </Card>
     </div>

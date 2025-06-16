@@ -1,7 +1,7 @@
 
 export interface DesignElement {
   id: string;
-  type: 'text' | 'shape' | 'pattern';
+  type: 'text' | 'shape' | 'pattern' | 'image';
   x: number;
   y: number;
   width: number;
@@ -12,8 +12,8 @@ export interface DesignElement {
   content?: string;
   fontSize?: number;
   fontFamily?: string;
-  shapeType?: 'rectangle' | 'circle' | 'triangle' | 'star';
-  patternType?: 'stripes' | 'dots' | 'gradient';
+  shapeType?: 'rectangle' | 'circle' | 'triangle' | 'star' | 'line' | 'diamond' | 'heart' | 'hexagon';
+  patternType?: 'stripes' | 'dots' | 'gradient' | 'checkerboard' | 'waves';
 }
 
 export interface DesignState {
