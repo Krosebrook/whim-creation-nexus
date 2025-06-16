@@ -7,7 +7,7 @@ interface Tab {
   id: string;
   label: string;
   icon: LucideIcon;
-  color: 'green' | 'blue' | 'purple' | 'orange';
+  color: 'green' | 'blue' | 'purple' | 'orange' | 'indigo';
 }
 
 interface TabNavigationProps {

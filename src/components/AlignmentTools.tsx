@@ -8,9 +8,7 @@ import {
   AlignRight, 
   AlignVerticalJustifyStart, 
   AlignVerticalJustifyCenter, 
-  AlignVerticalJustifyEnd,
-  DistributeHorizontal,
-  DistributeVertical
+  AlignVerticalJustifyEnd
 } from 'lucide-react';
 import { useDesign } from '@/contexts/DesignContext';
 
