@@ -1,7 +1,7 @@
 
 import { DesignElement } from '@/contexts/DesignContext';
 import { generateId } from '../idGenerator';
-import { accessoryTemplates } from '../templateData';
+import { accessoryTemplates } from '../templates/accessoryTemplates';
 import { createFallbackDesigns } from '../fallbackDesigns';
 
 export const generateAccessoryDesign = (subcategory: string): DesignElement[] => {

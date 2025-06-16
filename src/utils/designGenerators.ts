@@ -6,4 +6,4 @@ export { generateHomeDesign } from './generators/homeGenerator';
 export { generateStationeryDesign } from './generators/stationeryGenerator';
 export { buildElementsFromTemplate, createRandomElement } from './generators/elementBuilder';
 export { optimizeForPlatform } from './platformOptimization';
-export { getAllTemplates } from './templateData';
+export { getAllTemplates } from './getAllTemplates';

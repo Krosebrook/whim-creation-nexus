@@ -1,7 +1,7 @@
 
 import { DesignElement } from '@/contexts/DesignContext';
 import { generateId } from '../idGenerator';
-import { stationeryTemplates } from '../templateData';
+import { stationeryTemplates } from '../templates/stationeryTemplates';
 import { createFallbackDesigns } from '../fallbackDesigns';
 
 export const generateStationeryDesign = (subcategory: string): DesignElement[] => {
