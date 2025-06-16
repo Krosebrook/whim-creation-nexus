@@ -21,14 +21,14 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
 
   return (
     <Card 
-      className={`bg-slate-800/50 border-slate-600 hover:border-purple-400 transition-all duration-300 cursor-pointer ${
-        isSelected ? 'border-purple-400 bg-slate-800/80' : ''
+      className={`bg-white/90 border-gray-300 hover:border-purple-400 transition-all duration-300 cursor-pointer shadow-lg ${
+        isSelected ? 'border-purple-400 bg-white/95 shadow-xl' : ''
       }`}
       onClick={() => onToggleCategory(category.id)}
     >
       <CardHeader className="pb-3">
-        <CardTitle className="text-white flex items-center">
-          <IconComponent className="w-5 h-5 mr-2 text-purple-400" />
+        <CardTitle className="text-gray-800 flex items-center font-semibold">
+          <IconComponent className="w-5 h-5 mr-2 text-purple-600" />
           {category.name}
         </CardTitle>
       </CardHeader>
