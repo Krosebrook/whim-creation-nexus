@@ -12,13 +12,15 @@ export interface DesignElement {
   content?: string;
   fontSize?: number;
   fontFamily?: string;
-  shapeType?: 'rectangle' | 'circle' | 'triangle' | 'star' | 'line' | 'diamond' | 'heart' | 'hexagon';
+  shapeType?: 'rectangle' | 'circle' | 'triangle' | 'star' | 'line' | 'diamond' | 'heart' | 'hexagon' | 'arrow-right' | 'arrow-left' | 'arrow-up' | 'arrow-down' | 'pentagon' | 'octagon';
   patternType?: 'stripes' | 'dots' | 'gradient' | 'checkerboard' | 'waves';
+  visible?: boolean;
 }
 
 export interface DesignState {
   elements: DesignElement[];
   selectedElement: string | null;
+  selectedElements: string[];
   canvasWidth: number;
   canvasHeight: number;
 }

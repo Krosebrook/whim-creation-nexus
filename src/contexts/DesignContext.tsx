@@ -7,7 +7,9 @@ type DesignAction =
   | { type: 'ADD_ELEMENT'; element: DesignElement }
   | { type: 'UPDATE_ELEMENT'; id: string; updates: Partial<DesignElement> }
   | { type: 'DELETE_ELEMENT'; id: string }
-  | { type: 'SELECT_ELEMENT'; id: string | null }
+  | { type: 'SELECT_ELEMENT'; id: string | null; addToSelection?: boolean }
+  | { type: 'SELECT_MULTIPLE'; ids: string[] }
+  | { type: 'CLEAR_SELECTION' }
   | { type: 'CLEAR_CANVAS' }
   | { type: 'SET_CANVAS_SIZE'; width: number; height: number }
   | { type: 'RESTORE_STATE'; state: DesignState };
@@ -15,6 +17,7 @@ type DesignAction =
 const initialState: DesignState = {
   elements: [],
   selectedElement: null,
+  selectedElements: [],
   canvasWidth: 800,
   canvasHeight: 600,
 };
@@ -38,17 +41,42 @@ function designReducer(state: DesignState, action: DesignAction): DesignState {
         ...state,
         elements: state.elements.filter(element => element.id !== action.id),
         selectedElement: state.selectedElement === action.id ? null : state.selectedElement,
+        selectedElements: state.selectedElements.filter(id => id !== action.id),
       };
     case 'SELECT_ELEMENT':
+      if (action.addToSelection && action.id) {
+        const newSelection = state.selectedElements.includes(action.id)
+          ? state.selectedElements.filter(id => id !== action.id)
+          : [...state.selectedElements, action.id];
+        return {
+          ...state,
+          selectedElement: action.id,
+          selectedElements: newSelection,
+        };
+      }
       return {
         ...state,
         selectedElement: action.id,
+        selectedElements: action.id ? [action.id] : [],
+      };
+    case 'SELECT_MULTIPLE':
+      return {
+        ...state,
+        selectedElements: action.ids,
+        selectedElement: action.ids[0] || null,
+      };
+    case 'CLEAR_SELECTION':
+      return {
+        ...state,
+        selectedElement: null,
+        selectedElements: [],
       };
     case 'CLEAR_CANVAS':
       return {
         ...state,
         elements: [],
         selectedElement: null,
+        selectedElements: [],
       };
     case 'SET_CANVAS_SIZE':
       return {

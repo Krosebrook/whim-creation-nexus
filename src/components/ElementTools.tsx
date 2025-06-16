@@ -16,7 +16,13 @@ import {
   Minus,
   Diamond,
   Heart,
-  Hexagon
+  Hexagon,
+  ArrowRight,
+  ArrowLeft,
+  ArrowUp,
+  ArrowDown,
+  Pentagon,
+  Octagon
 } from 'lucide-react';
 import { useDesign } from '@/contexts/DesignContext';
 
@@ -48,7 +54,7 @@ const ElementTools: React.FC = () => {
     setTextInput('');
   };
 
-  const addShapeElement = (shapeType: 'rectangle' | 'circle' | 'triangle' | 'star' | 'line' | 'diamond' | 'heart' | 'hexagon') => {
+  const addShapeElement = (shapeType: 'rectangle' | 'circle' | 'triangle' | 'star' | 'line' | 'diamond' | 'heart' | 'hexagon' | 'arrow-right' | 'arrow-left' | 'arrow-up' | 'arrow-down' | 'pentagon' | 'octagon') => {
     const colors = ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     
@@ -147,25 +153,31 @@ const ElementTools: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-2">
             {[
               { type: 'rectangle', icon: Square, label: 'Rectangle' },
               { type: 'circle', icon: Circle, label: 'Circle' },
               { type: 'triangle', icon: Triangle, label: 'Triangle' },
               { type: 'star', icon: Star, label: 'Star' },
-              { type: 'line', icon: Minus, label: 'Line' },
               { type: 'diamond', icon: Diamond, label: 'Diamond' },
               { type: 'heart', icon: Heart, label: 'Heart' },
-              { type: 'hexagon', icon: Hexagon, label: 'Hexagon' }
+              { type: 'hexagon', icon: Hexagon, label: 'Hexagon' },
+              { type: 'pentagon', icon: Pentagon, label: 'Pentagon' },
+              { type: 'octagon', icon: Octagon, label: 'Octagon' },
+              { type: 'arrow-right', icon: ArrowRight, label: 'Arrow →' },
+              { type: 'arrow-left', icon: ArrowLeft, label: 'Arrow ←' },
+              { type: 'arrow-up', icon: ArrowUp, label: 'Arrow ↑' },
+              { type: 'arrow-down', icon: ArrowDown, label: 'Arrow ↓' },
+              { type: 'line', icon: Minus, label: 'Line' }
             ].map(({ type, icon: Icon, label }) => (
               <Button
                 key={type}
                 variant="outline"
                 onClick={() => addShapeElement(type as any)}
-                className="h-16 bg-white/80 border-purple-200 hover:bg-purple-50 hover:border-purple-300 flex-col space-y-1 transition-all duration-200"
+                className="h-12 bg-white/80 border-purple-200 hover:bg-purple-50 hover:border-purple-300 flex-col space-y-1 transition-all duration-200 text-xs"
               >
-                <Icon className="w-5 h-5 text-purple-600" />
-                <span className="text-xs text-gray-600">{label}</span>
+                <Icon className="w-4 h-4 text-purple-600" />
+                <span className="text-xs text-gray-600 leading-none">{label}</span>
               </Button>
             ))}
           </div>

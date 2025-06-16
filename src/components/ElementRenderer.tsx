@@ -1,13 +1,12 @@
-
 import React, { useState, useRef } from 'react';
 import { DesignElement } from '@/types/design';
 import { useDesign } from '@/contexts/DesignContext';
-import { Image } from 'lucide-react';
+import { Image, ArrowRight, ArrowLeft, ArrowUp, ArrowDown, Pentagon, Octagon } from 'lucide-react';
 
 interface ElementRendererProps {
   element: DesignElement;
   isSelected: boolean;
-  onElementClick: (elementId: string) => void;
+  onElementClick: (elementId: string, addToSelection?: boolean) => void;
 }
 
 const ElementRenderer: React.FC<ElementRendererProps> = ({ element, isSelected, onElementClick }) => {
@@ -16,6 +15,11 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({ element, isSelected, 
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const elementRef = useRef<HTMLDivElement>(null);
 
+  // Don't render if element is hidden
+  if (element.visible === false) {
+    return null;
+  }
+
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -23,7 +27,7 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({ element, isSelected, 
       x: e.clientX - element.x,
       y: e.clientY - element.y
     });
-    onElementClick(element.id);
+    onElementClick(element.id, e.ctrlKey || e.metaKey);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
@@ -135,6 +139,28 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({ element, isSelected, 
         backgroundColor: element.color,
         clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
       };
+    } else if (element.shapeType === 'pentagon') {
+      shapeStyle = {
+        ...baseStyle,
+        backgroundColor: element.color,
+        clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)',
+      };
+    } else if (element.shapeType === 'octagon') {
+      shapeStyle = {
+        ...baseStyle,
+        backgroundColor: element.color,
+        clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)',
+      };
+    } else if (element.shapeType?.includes('arrow')) {
+      // Simplified arrow rendering - you could enhance this with SVG
+      shapeStyle = {
+        ...baseStyle,
+        backgroundColor: element.color,
+        borderRadius: '4px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      };
     } else if (element.shapeType === 'line') {
       shapeStyle.borderRadius = '4px';
     } else {
@@ -146,7 +172,16 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({ element, isSelected, 
         ref={elementRef}
         style={shapeStyle}
         onMouseDown={handleMouseDown}
-      />
+      >
+        {element.shapeType?.includes('arrow') && (
+          <div className="text-white font-bold">
+            {element.shapeType === 'arrow-right' && '→'}
+            {element.shapeType === 'arrow-left' && '←'}
+            {element.shapeType === 'arrow-up' && '↑'}
+            {element.shapeType === 'arrow-down' && '↓'}
+          </div>
+        )}
+      </div>
     );
   };
 

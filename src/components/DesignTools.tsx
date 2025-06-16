@@ -5,12 +5,18 @@ import {
   Plus,
   Layers,
   Download,
-  Settings
+  Settings,
+  AlignCenter,
+  History,
+  Keyboard
 } from 'lucide-react';
 import ProductTools from './ProductTools';
 import ElementTools from './ElementTools';
 import PropertyTools from './PropertyTools';
 import PlatformTools from './PlatformTools';
+import AlignmentTools from './AlignmentTools';
+import LayerPanel from './LayerPanel';
+import KeyboardShortcutsPanel from './KeyboardShortcutsPanel';
 import ToolsHeader from './ToolsHeader';
 import TabNavigation from './TabNavigation';
 import { 
@@ -66,6 +72,8 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
   const tabs = [
     { id: 'products', label: 'Products', icon: Layers, color: 'green' as const },
     { id: 'elements', label: 'Elements', icon: Plus, color: 'blue' as const },
+    { id: 'layers', label: 'Layers', icon: Layers, color: 'indigo' as const },
+    { id: 'align', label: 'Align', icon: AlignCenter, color: 'blue' as const },
     { id: 'properties', label: 'Properties', icon: Settings, color: 'purple' as const },
     { id: 'platform', label: 'Export', icon: Download, color: 'orange' as const },
   ];
@@ -74,6 +82,11 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
     <div className="w-80 bg-white/95 backdrop-blur-md border-r border-gray-200/60 flex flex-col shadow-xl">
       {/* Header */}
       <ToolsHeader onBack={onBack} />
+      
+      {/* Keyboard Shortcuts Button */}
+      <div className="px-4 py-2 border-b border-gray-200/60">
+        <KeyboardShortcutsPanel />
+      </div>
       
       {/* Tab Navigation */}
       <div className={designSystem.spacing.card}>
@@ -87,6 +100,10 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
         )}
 
         {activeTab === 'elements' && <ElementTools />}
+
+        {activeTab === 'layers' && <LayerPanel />}
+
+        {activeTab === 'align' && <AlignmentTools />}
 
         {activeTab === 'properties' && <PropertyTools />}
 

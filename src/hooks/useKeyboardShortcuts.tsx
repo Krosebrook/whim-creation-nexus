@@ -1,7 +1,7 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDesign } from '@/contexts/DesignContext';
-import { DesignElement } from '@/types/design';
+import { useCopyPaste } from './useCopyPaste';
 
 interface KeyboardShortcutsProps {
   onUndo?: () => void;
@@ -21,46 +21,17 @@ export const useKeyboardShortcuts = ({
   onPaste
 }: KeyboardShortcutsProps) => {
   const { state, dispatch } = useDesign();
-  const [clipboard, setClipboard] = useState<DesignElement | null>(null);
+  const { copyElements, pasteElements, duplicateElements } = useCopyPaste();
 
-  const generateId = () => Math.random().toString(36).substr(2, 9);
-
-  const copyElement = () => {
-    if (state.selectedElement) {
-      const element = state.elements.find(el => el.id === state.selectedElement);
-      if (element) {
-        setClipboard(element);
-      }
-    }
+  const selectAllElements = () => {
+    const allIds = state.elements.map(el => el.id);
+    dispatch({ type: 'SELECT_MULTIPLE', ids: allIds });
   };
 
-  const pasteElement = () => {
-    if (clipboard) {
-      const newElement = {
-        ...clipboard,
-        id: generateId(),
-        x: clipboard.x + 20,
-        y: clipboard.y + 20,
-      };
-      dispatch({ type: 'ADD_ELEMENT', element: newElement });
-      dispatch({ type: 'SELECT_ELEMENT', id: newElement.id });
-    }
-  };
-
-  const duplicateElement = () => {
-    if (state.selectedElement) {
-      const element = state.elements.find(el => el.id === state.selectedElement);
-      if (element) {
-        const newElement = {
-          ...element,
-          id: generateId(),
-          x: element.x + 20,
-          y: element.y + 20,
-        };
-        dispatch({ type: 'ADD_ELEMENT', element: newElement });
-        dispatch({ type: 'SELECT_ELEMENT', id: newElement.id });
-      }
-    }
+  const deleteSelected = () => {
+    state.selectedElements.forEach(id => {
+      dispatch({ type: 'DELETE_ELEMENT', id });
+    });
   };
 
   useEffect(() => {
@@ -85,28 +56,32 @@ export const useKeyboardShortcuts = ({
       }
 
       // Delete: Delete or Backspace
-      if ((event.key === 'Delete' || event.key === 'Backspace') && state.selectedElement) {
+      if ((event.key === 'Delete' || event.key === 'Backspace') && state.selectedElements.length > 0) {
         event.preventDefault();
         if (onDelete) {
           onDelete();
         } else {
-          dispatch({ type: 'DELETE_ELEMENT', id: state.selectedElement });
+          deleteSelected();
         }
       }
 
       // Select All: Ctrl+A
       if (isCtrl && event.key === 'a') {
         event.preventDefault();
-        onSelectAll?.();
+        if (onSelectAll) {
+          onSelectAll();
+        } else {
+          selectAllElements();
+        }
       }
 
       // Copy: Ctrl+C
-      if (isCtrl && event.key === 'c' && state.selectedElement) {
+      if (isCtrl && event.key === 'c' && state.selectedElements.length > 0) {
         event.preventDefault();
         if (onCopy) {
           onCopy();
         } else {
-          copyElement();
+          copyElements();
         }
       }
 
@@ -116,56 +91,59 @@ export const useKeyboardShortcuts = ({
         if (onPaste) {
           onPaste();
         } else {
-          pasteElement();
+          pasteElements();
         }
       }
 
       // Duplicate: Ctrl+D
       if (isCtrl && event.key === 'd') {
         event.preventDefault();
-        duplicateElement();
+        duplicateElements();
       }
 
       // Escape: Deselect
       if (event.key === 'Escape') {
         event.preventDefault();
-        dispatch({ type: 'SELECT_ELEMENT', id: null });
+        dispatch({ type: 'CLEAR_SELECTION' });
       }
 
-      // Arrow keys: Move selected element
-      if (state.selectedElement && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+      // Arrow keys: Move selected elements
+      if (state.selectedElements.length > 0 && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
         event.preventDefault();
-        const element = state.elements.find(el => el.id === state.selectedElement);
-        if (element) {
-          const moveDistance = event.shiftKey ? 10 : 1;
-          let newX = element.x;
-          let newY = element.y;
+        const moveDistance = event.shiftKey ? 10 : 1;
+        
+        state.selectedElements.forEach(id => {
+          const element = state.elements.find(el => el.id === id);
+          if (element) {
+            let newX = element.x;
+            let newY = element.y;
 
-          switch (event.key) {
-            case 'ArrowUp':
-              newY -= moveDistance;
-              break;
-            case 'ArrowDown':
-              newY += moveDistance;
-              break;
-            case 'ArrowLeft':
-              newX -= moveDistance;
-              break;
-            case 'ArrowRight':
-              newX += moveDistance;
-              break;
+            switch (event.key) {
+              case 'ArrowUp':
+                newY -= moveDistance;
+                break;
+              case 'ArrowDown':
+                newY += moveDistance;
+                break;
+              case 'ArrowLeft':
+                newX -= moveDistance;
+                break;
+              case 'ArrowRight':
+                newX += moveDistance;
+                break;
+            }
+
+            dispatch({
+              type: 'UPDATE_ELEMENT',
+              id: id,
+              updates: { x: newX, y: newY }
+            });
           }
-
-          dispatch({
-            type: 'UPDATE_ELEMENT',
-            id: state.selectedElement,
-            updates: { x: newX, y: newY }
-          });
-        }
+        });
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [state.selectedElement, state.elements, clipboard, onUndo, onRedo, onDelete, onSelectAll, onCopy, onPaste, dispatch]);
+  }, [state.selectedElements, state.elements, onUndo, onRedo, onDelete, onSelectAll, onCopy, onPaste, dispatch, copyElements, pasteElements, duplicateElements]);
 };
