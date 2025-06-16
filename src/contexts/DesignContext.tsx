@@ -1,29 +1,6 @@
 
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-
-export interface DesignElement {
-  id: string;
-  type: 'text' | 'shape' | 'pattern';
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  rotation: number;
-  opacity: number;
-  color: string;
-  content?: string;
-  fontSize?: number;
-  fontFamily?: string;
-  shapeType?: 'rectangle' | 'circle' | 'triangle' | 'star';
-  patternType?: 'stripes' | 'dots' | 'gradient';
-}
-
-export interface DesignState {
-  elements: DesignElement[];
-  selectedElement: string | null;
-  canvasWidth: number;
-  canvasHeight: number;
-}
+import { DesignElement, DesignState } from '@/types/design';
 
 type DesignAction =
   | { type: 'ADD_ELEMENT'; element: DesignElement }
@@ -106,3 +83,6 @@ export const useDesign = () => {
   }
   return context;
 };
+
+// Re-export the types for convenience
+export type { DesignElement, DesignState };
