@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useDesign } from '@/contexts/DesignContext';
-import { Palette, Move, RotateCw } from 'lucide-react';
+import { Palette, Sparkles, Grid, Eye } from 'lucide-react';
 
 const DesignCanvas: React.FC = () => {
   const { state, dispatch } = useDesign();
@@ -27,9 +27,10 @@ const DesignCanvas: React.FC = () => {
       transform: `rotate(${element.rotation}deg)`,
       opacity: element.opacity,
       cursor: 'pointer',
-      border: isSelected ? '2px solid #8b5cf6' : 'none',
-      borderRadius: isSelected ? '4px' : '0',
-      boxShadow: isSelected ? '0 0 0 2px rgba(139, 92, 246, 0.2)' : 'none',
+      border: isSelected ? '2px solid #6366f1' : 'none',
+      borderRadius: isSelected ? '8px' : '0',
+      boxShadow: isSelected ? '0 0 0 4px rgba(99, 102, 241, 0.1), 0 8px 25px -5px rgba(99, 102, 241, 0.2)' : 'none',
+      transition: 'all 0.2s ease-in-out',
     };
 
     switch (element.type) {
@@ -45,7 +46,8 @@ const DesignCanvas: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontWeight: '500',
+              fontWeight: '600',
+              background: isSelected ? 'rgba(99, 102, 241, 0.02)' : 'transparent',
             }}
             onClick={() => handleElementClick(element.id)}
           >
@@ -53,7 +55,13 @@ const DesignCanvas: React.FC = () => {
           </div>
         );
       case 'shape':
-        let shapeStyle: React.CSSProperties = { ...baseStyle, backgroundColor: element.color };
+        let shapeStyle: React.CSSProperties = { 
+          ...baseStyle, 
+          backgroundColor: element.color,
+          boxShadow: isSelected 
+            ? '0 0 0 4px rgba(99, 102, 241, 0.1), 0 8px 25px -5px rgba(99, 102, 241, 0.2)' 
+            : '0 2px 8px rgba(0, 0, 0, 0.1)'
+        };
         if (element.shapeType === 'circle') {
           shapeStyle.borderRadius = '50%';
         } else if (element.shapeType === 'triangle') {
@@ -65,7 +73,12 @@ const DesignCanvas: React.FC = () => {
             borderBottom: `${element.height}px solid ${element.color}`,
             width: 0,
             height: 0,
+            boxShadow: isSelected 
+              ? '0 0 0 4px rgba(99, 102, 241, 0.1)' 
+              : '0 2px 8px rgba(0, 0, 0, 0.1)',
           };
+        } else {
+          shapeStyle.borderRadius = '8px';
         }
         return (
           <div
@@ -75,14 +88,18 @@ const DesignCanvas: React.FC = () => {
           />
         );
       case 'pattern':
-        let patternStyle: React.CSSProperties = { ...baseStyle };
+        let patternStyle: React.CSSProperties = { 
+          ...baseStyle,
+          borderRadius: '8px',
+          overflow: 'hidden',
+        };
         if (element.patternType === 'stripes') {
-          patternStyle.background = `repeating-linear-gradient(45deg, ${element.color}, ${element.color} 10px, transparent 10px, transparent 20px)`;
+          patternStyle.background = `repeating-linear-gradient(45deg, ${element.color}, ${element.color} 10px, rgba(255,255,255,0.3) 10px, rgba(255,255,255,0.3) 20px)`;
         } else if (element.patternType === 'dots') {
-          patternStyle.background = `radial-gradient(circle, ${element.color} 2px, transparent 2px)`;
-          patternStyle.backgroundSize = '20px 20px';
+          patternStyle.background = `radial-gradient(circle, ${element.color} 3px, transparent 3px)`;
+          patternStyle.backgroundSize = '24px 24px';
         } else if (element.patternType === 'gradient') {
-          patternStyle.background = `linear-gradient(45deg, ${element.color}, #ffffff)`;
+          patternStyle.background = `linear-gradient(135deg, ${element.color}, rgba(255,255,255,0.8))`;
         }
         return (
           <div
@@ -97,56 +114,74 @@ const DesignCanvas: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden border-l border-slate-300/50">
+    <div className="flex-1 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
       {/* Canvas Header */}
-      <div className="bg-white/90 backdrop-blur-sm border-b border-slate-200/50 p-4 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-          <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-          <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-          <span className="ml-4 text-sm font-medium text-slate-600">Design Canvas</span>
+      <div className="bg-white/90 backdrop-blur-sm border-b border-gray-200/60 p-4 flex items-center justify-between shadow-sm">
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+            <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+            <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Eye className="w-4 h-4 text-gray-500" />
+            <span className="text-sm font-semibold text-gray-700">Design Canvas</span>
+          </div>
         </div>
-        <div className="flex items-center space-x-2 text-xs text-slate-500">
-          <Palette className="w-4 h-4" />
-          <span>{state.elements.length} elements</span>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full">
+            <Palette className="w-3.5 h-3.5" />
+            <span className="font-medium">{state.elements.length} elements</span>
+          </div>
+          <div className="flex items-center space-x-2 text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full">
+            <Grid className="w-3.5 h-3.5" />
+            <span className="font-medium">1200 × 800</span>
+          </div>
         </div>
       </div>
 
       {/* Canvas Area */}
-      <div
-        className="w-full h-full bg-white relative shadow-inner"
-        onClick={handleCanvasClick}
-        style={{ 
-          minHeight: '600px',
-          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,.05) 1px, transparent 0)',
-          backgroundSize: '20px 20px'
-        }}
-      >
-        {/* Canvas Guidelines */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-0 right-0 h-px bg-blue-200/50"></div>
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-blue-200/50"></div>
-        </div>
+      <div className="p-8 h-full flex items-center justify-center">
+        <div
+          className="bg-white relative shadow-2xl rounded-2xl border border-gray-200/50 overflow-hidden"
+          onClick={handleCanvasClick}
+          style={{ 
+            width: '800px',
+            height: '600px',
+            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.1) 1px, transparent 0)',
+            backgroundSize: '24px 24px'
+          }}
+        >
+          {/* Canvas Guidelines */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-0 right-0 h-px bg-indigo-200/40"></div>
+            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-indigo-200/40"></div>
+          </div>
 
-        {/* Elements */}
-        {state.elements.map(renderElement)}
+          {/* Elements */}
+          {state.elements.map(renderElement)}
 
-        {/* Empty State */}
-        {state.elements.length === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center space-y-4">
-              <div className="w-24 h-24 mx-auto bg-gradient-to-br from-purple-100 to-blue-100 rounded-full flex items-center justify-center">
-                <Palette className="w-10 h-10 text-purple-500" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-slate-700">Start Creating</h3>
-                <p className="text-sm text-slate-500 max-w-xs">
-                  Select a product category from the sidebar to begin designing your print-on-demand product.
-                </p>
+          {/* Empty State */}
+          {state.elements.length === 0 && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center space-y-6 max-w-sm">
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center">
+                  <Sparkles className="w-10 h-10 text-indigo-500" />
+                </div>
+                <div className="space-y-3">
+                  <h3 className="text-xl font-bold text-gray-800">Ready to Create?</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                    Choose a product category from the sidebar to start designing your print-on-demand masterpiece.
+                  </p>
+                </div>
+                <div className="flex items-center justify-center space-x-2 text-xs text-gray-400">
+                  <div className="w-2 h-2 bg-indigo-200 rounded-full animate-pulse"></div>
+                  <span>Waiting for your creativity</span>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

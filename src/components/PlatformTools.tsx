@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Download, Sparkles } from 'lucide-react';
+import { Download, Sparkles, Zap, CheckCircle } from 'lucide-react';
 import { useDesign } from '@/contexts/DesignContext';
 import { optimizeForPlatform } from '@/utils/designGenerators';
 
@@ -20,46 +20,106 @@ const PlatformTools: React.FC = () => {
     });
   };
 
+  const platformInfo = {
+    printify: { 
+      tip: '🎨 Colorful, detailed designs recommended',
+      color: 'from-green-500 to-emerald-600',
+      bgColor: 'from-white to-green-50/30'
+    },
+    amazon: { 
+      tip: '✨ High contrast designs work best',
+      color: 'from-orange-500 to-amber-600',
+      bgColor: 'from-white to-orange-50/30'
+    },
+    shopify: { 
+      tip: '🏪 Professional, branded designs preferred',
+      color: 'from-blue-500 to-cyan-600',
+      bgColor: 'from-white to-blue-50/30'
+    },
+    canva: { 
+      tip: '📐 Template-friendly designs perform well',
+      color: 'from-purple-500 to-violet-600',
+      bgColor: 'from-white to-purple-50/30'
+    }
+  };
+
+  const currentPlatform = platformInfo[selectedPlatform as keyof typeof platformInfo];
+
   return (
-    <Card className="border-slate-200 shadow-sm">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-sm flex items-center text-slate-700">
-          <Download className="w-4 h-4 mr-2 text-blue-500" />
-          Platform Optimization
+    <Card className={`border-none shadow-lg bg-gradient-to-br ${currentPlatform.bgColor}`}>
+      <CardHeader className="pb-4">
+        <CardTitle className="text-sm flex items-center text-gray-700">
+          <div className="w-8 h-8 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-lg flex items-center justify-center mr-3">
+            <Download className="w-4 h-4 text-indigo-600" />
+          </div>
+          Platform Export
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6">
         <div>
-          <Label className="text-slate-600 text-sm font-medium">Target Platform</Label>
+          <Label className="text-gray-600 text-sm font-medium mb-2 block">Target Platform</Label>
           <Select value={selectedPlatform} onValueChange={setSelectedPlatform}>
-            <SelectTrigger className="bg-white border-slate-200 text-slate-700 mt-1">
+            <SelectTrigger className="bg-white/80 border-gray-200 text-gray-700 focus:border-indigo-300 focus:ring-indigo-200">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-white border-slate-200">
-              <SelectItem value="printify">Printify</SelectItem>
-              <SelectItem value="amazon">Amazon Merch</SelectItem>
-              <SelectItem value="shopify">Shopify</SelectItem>
-              <SelectItem value="canva">Canva</SelectItem>
+            <SelectContent className="bg-white border-gray-200">
+              <SelectItem value="printify">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                  Printify
+                </div>
+              </SelectItem>
+              <SelectItem value="amazon">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
+                  Amazon Merch
+                </div>
+              </SelectItem>
+              <SelectItem value="shopify">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                  Shopify
+                </div>
+              </SelectItem>
+              <SelectItem value="canva">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-purple-500 rounded-full mr-2"></div>
+                  Canva
+                </div>
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
         
-        <div className="p-3 bg-blue-50 rounded-lg border border-blue-100">
-          <p className="text-xs text-blue-700 font-medium">
-            {selectedPlatform === 'amazon' && '✨ High contrast designs work best'}
-            {selectedPlatform === 'printify' && '🎨 Colorful, detailed designs recommended'}
-            {selectedPlatform === 'shopify' && '🏪 Professional, branded designs preferred'}
-            {selectedPlatform === 'canva' && '📐 Template-friendly designs perform well'}
-          </p>
+        <div className="p-4 bg-white/60 rounded-xl border border-gray-200/50">
+          <div className="flex items-start space-x-3">
+            <CheckCircle className="w-5 h-5 text-indigo-500 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-medium text-gray-700 mb-1">Platform Tip</p>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                {currentPlatform.tip}
+              </p>
+            </div>
+          </div>
         </div>
         
         <Button 
           onClick={handleOptimize}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+          className={`w-full bg-gradient-to-r ${currentPlatform.color} hover:shadow-lg text-white shadow-md transition-all duration-200`}
         >
           <Sparkles className="w-4 h-4 mr-2" />
           Optimize for {selectedPlatform}
         </Button>
+
+        <div className="pt-2 border-t border-gray-200/50">
+          <Button 
+            variant="outline"
+            className="w-full bg-white/80 border-gray-200 hover:bg-gray-50 text-gray-700"
+          >
+            <Zap className="w-4 h-4 mr-2" />
+            Export Design
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

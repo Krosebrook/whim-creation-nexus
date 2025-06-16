@@ -7,7 +7,8 @@ import {
   Plus,
   Layers,
   Download,
-  Settings
+  Settings,
+  Sparkles
 } from 'lucide-react';
 import ProductTools from './ProductTools';
 import ElementTools from './ElementTools';
@@ -65,38 +66,49 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
   };
 
   const tabs = [
-    { id: 'products', label: 'Products', icon: Layers },
-    { id: 'elements', label: 'Elements', icon: Plus },
-    { id: 'properties', label: 'Properties', icon: Settings },
-    { id: 'platform', label: 'Export', icon: Download },
+    { id: 'products', label: 'Products', icon: Layers, color: 'text-emerald-600' },
+    { id: 'elements', label: 'Elements', icon: Plus, color: 'text-blue-600' },
+    { id: 'properties', label: 'Properties', icon: Settings, color: 'text-purple-600' },
+    { id: 'platform', label: 'Export', icon: Download, color: 'text-orange-600' },
   ];
 
   return (
-    <div className="w-80 bg-white border-r border-slate-200 flex flex-col shadow-lg">
+    <div className="w-80 bg-white/95 backdrop-blur-sm border-r border-gray-200/50 flex flex-col shadow-xl">
       {/* Header */}
-      <div className="p-6 border-b border-slate-200 bg-gradient-to-r from-purple-50 to-blue-50">
-        <div className="flex items-center mb-4">
-          <Button variant="ghost" size="sm" onClick={onBack} className="mr-3 hover:bg-white/50">
+      <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50/50">
+        <div className="flex items-center mb-6">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={onBack} 
+            className="mr-3 hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors"
+          >
             <ArrowLeft className="w-4 h-4" />
           </Button>
-          <h2 className="text-xl font-bold text-slate-800">Design Studio</h2>
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 flex items-center">
+              <Sparkles className="w-5 h-5 mr-2 text-indigo-500" />
+              Design Studio
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">Create stunning print designs</p>
+          </div>
         </div>
         
         {/* Tab Navigation */}
-        <div className="flex space-x-1 bg-slate-100 rounded-lg p-1">
+        <div className="grid grid-cols-2 gap-2">
           {tabs.map((tab) => {
             const IconComponent = tab.icon;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center px-3 py-2.5 rounded-md text-xs font-medium transition-all duration-200 ${
+                className={`flex items-center justify-center px-3 py-3 rounded-xl text-xs font-semibold transition-all duration-200 ${
                   activeTab === tab.id
-                    ? 'bg-white text-purple-600 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-800 hover:bg-white/50'
+                    ? 'bg-white text-gray-800 shadow-md shadow-gray-200/50 border border-gray-200'
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                 }`}
               >
-                <IconComponent className="w-4 h-4 mr-1.5" />
+                <IconComponent className={`w-4 h-4 mr-2 ${activeTab === tab.id ? tab.color : ''}`} />
                 {tab.label}
               </button>
             );
@@ -105,7 +117,7 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
       </div>
 
       {/* Tab Content */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50/50">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50/30">
         {activeTab === 'products' && (
           <ProductTools onSelectProduct={handleProductSelect} />
         )}
