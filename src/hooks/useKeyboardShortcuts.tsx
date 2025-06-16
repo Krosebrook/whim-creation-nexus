@@ -45,7 +45,11 @@ export const useKeyboardShortcuts = ({
       // Delete: Delete or Backspace
       if ((event.key === 'Delete' || event.key === 'Backspace') && state.selectedElement) {
         event.preventDefault();
-        onDelete?.() || dispatch({ type: 'DELETE_ELEMENT', id: state.selectedElement });
+        if (onDelete) {
+          onDelete();
+        } else {
+          dispatch({ type: 'DELETE_ELEMENT', id: state.selectedElement });
+        }
       }
 
       // Select All: Ctrl+A
