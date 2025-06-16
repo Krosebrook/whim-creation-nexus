@@ -17,8 +17,8 @@ const DesignCanvas: React.FC = () => {
 
   const renderElement = (element: any) => {
     const isSelected = state.selectedElement === element.id;
-    const baseStyle = {
-      position: 'absolute' as const,
+    const baseStyle: React.CSSProperties = {
+      position: 'absolute',
       left: element.x,
       top: element.y,
       width: element.width,
@@ -49,16 +49,19 @@ const DesignCanvas: React.FC = () => {
           </div>
         );
       case 'shape':
-        let shapeStyle = { ...baseStyle, backgroundColor: element.color };
+        let shapeStyle: React.CSSProperties = { ...baseStyle, backgroundColor: element.color };
         if (element.shapeType === 'circle') {
           shapeStyle.borderRadius = '50%';
         } else if (element.shapeType === 'triangle') {
-          shapeStyle.backgroundColor = 'transparent';
-          shapeStyle.borderLeft = `${element.width / 2}px solid transparent`;
-          shapeStyle.borderRight = `${element.width / 2}px solid transparent`;
-          shapeStyle.borderBottom = `${element.height}px solid ${element.color}`;
-          shapeStyle.width = 0;
-          shapeStyle.height = 0;
+          shapeStyle = {
+            ...baseStyle,
+            backgroundColor: 'transparent',
+            borderLeft: `${element.width / 2}px solid transparent`,
+            borderRight: `${element.width / 2}px solid transparent`,
+            borderBottom: `${element.height}px solid ${element.color}`,
+            width: 0,
+            height: 0,
+          };
         }
         return (
           <div
@@ -68,7 +71,7 @@ const DesignCanvas: React.FC = () => {
           />
         );
       case 'pattern':
-        let patternStyle = { ...baseStyle };
+        let patternStyle: React.CSSProperties = { ...baseStyle };
         if (element.patternType === 'stripes') {
           patternStyle.background = `repeating-linear-gradient(45deg, ${element.color}, ${element.color} 10px, transparent 10px, transparent 20px)`;
         } else if (element.patternType === 'dots') {
