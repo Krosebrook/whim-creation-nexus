@@ -2,7 +2,6 @@
 import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
 import { DesignElement, DesignState } from '@/types/design';
 import { useUndoRedo } from '@/hooks/useUndoRedo';
-import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 type DesignAction =
   | { type: 'ADD_ELEMENT'; element: DesignElement }
@@ -88,12 +87,6 @@ export const DesignProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   useEffect(() => {
     pushState(state);
   }, [state.elements, state.canvasWidth, state.canvasHeight]);
-
-  // Setup keyboard shortcuts
-  useKeyboardShortcuts({
-    onUndo: undo,
-    onRedo: redo,
-  });
 
   return (
     <DesignContext.Provider value={{ state, dispatch, canUndo, canRedo, undo, redo }}>
