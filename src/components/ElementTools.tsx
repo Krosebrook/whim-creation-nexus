@@ -94,21 +94,42 @@ const ElementTools: React.FC = () => {
     dispatch({ type: 'ADD_ELEMENT', element });
   };
 
-  const addImagePlaceholder = () => {
-    const element = {
-      id: generateId(),
-      type: 'image' as const,
-      x: 120,
-      y: 120,
-      width: 200,
-      height: 150,
-      rotation: 0,
-      opacity: 1,
-      color: '#e5e7eb',
-      content: 'Image Placeholder',
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const imageUrl = event.target?.result as string;
+      const img = new window.Image();
+      
+      img.onload = () => {
+        const aspectRatio = img.width / img.height;
+        const maxWidth = 300;
+        const width = Math.min(maxWidth, img.width);
+        const height = width / aspectRatio;
+        
+        const element = {
+          id: generateId(),
+          type: 'image' as const,
+          x: 120,
+          y: 120,
+          width,
+          height,
+          rotation: 0,
+          opacity: 1,
+          color: '#ffffff',
+          imageUrl,
+        };
+        
+        dispatch({ type: 'ADD_ELEMENT', element });
+      };
+      
+      img.src = imageUrl;
     };
     
-    dispatch({ type: 'ADD_ELEMENT', element });
+    reader.readAsDataURL(file);
+    e.target.value = '';
   };
 
   return (
@@ -229,15 +250,26 @@ const ElementTools: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Button
-            variant="outline"
-            onClick={addImagePlaceholder}
-            className="w-full bg-white/80 border-blue-200 hover:bg-blue-50 hover:border-blue-300 justify-start transition-all duration-200"
-          >
-            <Image className="w-4 h-4 mr-3 text-blue-600" />
-            <span className="text-gray-700">Add Image Placeholder</span>
-            <Plus className="w-3 h-3 ml-auto text-blue-500" />
-          </Button>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+            id="image-upload"
+          />
+          <label htmlFor="image-upload">
+            <Button
+              variant="outline"
+              className="w-full bg-white/80 border-blue-200 hover:bg-blue-50 hover:border-blue-300 justify-start transition-all duration-200 cursor-pointer"
+              asChild
+            >
+              <span>
+                <Image className="w-4 h-4 mr-3 text-blue-600" />
+                <span className="text-gray-700">Upload Image</span>
+                <Plus className="w-3 h-3 ml-auto text-blue-500" />
+              </span>
+            </Button>
+          </label>
         </CardContent>
       </Card>
     </div>

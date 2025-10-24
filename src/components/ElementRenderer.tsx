@@ -82,10 +82,10 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({ element, isSelected, 
         color: element.color,
         fontSize: element.fontSize,
         fontFamily: element.fontFamily,
+        fontWeight: element.fontWeight || 600,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontWeight: '600',
         background: isSelected ? 'rgba(99, 102, 241, 0.03)' : 'transparent',
       }}
       onMouseDown={handleMouseDown}
@@ -214,25 +214,45 @@ const ElementRenderer: React.FC<ElementRendererProps> = ({ element, isSelected, 
     );
   };
 
-  const renderImageElement = () => (
-    <div
-      ref={elementRef}
-      style={{
-        ...baseStyle,
-        backgroundColor: element.color,
-        borderRadius: '8px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        border: '2px dashed #d1d5db',
-      }}
-      onMouseDown={handleMouseDown}
-    >
-      <Image className="w-8 h-8 text-gray-400 mb-2" />
-      <span className="text-xs text-gray-500">{element.content}</span>
-    </div>
-  );
+  const renderImageElement = () => {
+    if (element.imageUrl) {
+      return (
+        <div
+          ref={elementRef}
+          style={{
+            ...baseStyle,
+            borderRadius: '8px',
+            overflow: 'hidden',
+            backgroundImage: `url(${element.imageUrl})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+          onMouseDown={handleMouseDown}
+        />
+      );
+    }
+    
+    return (
+      <div
+        ref={elementRef}
+        style={{
+          ...baseStyle,
+          backgroundColor: element.color,
+          borderRadius: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          border: '2px dashed #d1d5db',
+        }}
+        onMouseDown={handleMouseDown}
+      >
+        <Image className="w-8 h-8 text-gray-400 mb-2" />
+        <span className="text-xs text-gray-500">No Image</span>
+      </div>
+    );
+  };
 
   switch (element.type) {
     case 'text':

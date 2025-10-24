@@ -5,8 +5,24 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { Settings, Trash2, Edit3, Palette, RotateCw, Eye } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Settings, Trash2, Edit3, Palette, RotateCw, Eye, Type } from 'lucide-react';
 import { useDesign } from '@/contexts/DesignContext';
+
+const GOOGLE_FONTS = [
+  { name: 'Roboto', family: 'Roboto, sans-serif' },
+  { name: 'Open Sans', family: 'Open Sans, sans-serif' },
+  { name: 'Lato', family: 'Lato, sans-serif' },
+  { name: 'Montserrat', family: 'Montserrat, sans-serif' },
+  { name: 'Playfair Display', family: 'Playfair Display, serif' },
+  { name: 'Poppins', family: 'Poppins, sans-serif' },
+  { name: 'Raleway', family: 'Raleway, sans-serif' },
+  { name: 'Merriweather', family: 'Merriweather, serif' },
+  { name: 'Oswald', family: 'Oswald, sans-serif' },
+  { name: 'Bebas Neue', family: 'Bebas Neue, sans-serif' },
+  { name: 'Pacifico', family: 'Pacifico, cursive' },
+  { name: 'Dancing Script', family: 'Dancing Script, cursive' },
+];
 
 const PropertyTools: React.FC = () => {
   const { state, dispatch } = useDesign();
@@ -62,6 +78,33 @@ const PropertyTools: React.FC = () => {
                 className="bg-white/80 border-indigo-200 text-gray-700 focus:border-indigo-300 focus:ring-indigo-200"
               />
             </div>
+            
+            <div>
+              <Label className="text-gray-600 text-sm font-medium flex items-center mb-2">
+                <Type className="w-3 h-3 mr-1" />
+                Font Family
+              </Label>
+              <Select 
+                value={selectedElement.fontFamily || 'Inter, system-ui, sans-serif'}
+                onValueChange={(value) => updateSelectedElement({ fontFamily: value })}
+              >
+                <SelectTrigger className="bg-white/80 border-indigo-200">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="max-h-[300px]">
+                  {GOOGLE_FONTS.map((font) => (
+                    <SelectItem 
+                      key={font.family} 
+                      value={font.family}
+                      style={{ fontFamily: font.family }}
+                    >
+                      {font.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
             <div>
               <Label className="text-gray-600 text-sm font-medium flex items-center mb-3">
                 <span className="w-3 h-3 mr-1 text-xs">Aa</span>
@@ -70,9 +113,24 @@ const PropertyTools: React.FC = () => {
               <Slider
                 value={[selectedElement.fontSize || 24]}
                 onValueChange={([value]) => updateSelectedElement({ fontSize: value })}
-                max={72}
+                max={120}
                 min={8}
                 step={1}
+                className="mt-2"
+              />
+            </div>
+            
+            <div>
+              <Label className="text-gray-600 text-sm font-medium flex items-center mb-3">
+                <span className="font-bold mr-1">W</span>
+                Font Weight: {selectedElement.fontWeight || 400}
+              </Label>
+              <Slider
+                value={[selectedElement.fontWeight || 400]}
+                onValueChange={([value]) => updateSelectedElement({ fontWeight: value })}
+                max={900}
+                min={100}
+                step={100}
                 className="mt-2"
               />
             </div>

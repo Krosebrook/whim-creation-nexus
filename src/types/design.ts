@@ -12,6 +12,8 @@ export interface DesignElement {
   content?: string;
   fontSize?: number;
   fontFamily?: string;
+  fontWeight?: number;
+  imageUrl?: string;
   shapeType?: 'rectangle' | 'circle' | 'triangle' | 'star' | 'line' | 'diamond' | 'heart' | 'hexagon' | 'arrow-right' | 'arrow-left' | 'arrow-up' | 'arrow-down' | 'pentagon' | 'octagon';
   patternType?: 'stripes' | 'dots' | 'gradient' | 'checkerboard' | 'waves';
   visible?: boolean;
