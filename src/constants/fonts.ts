@@ -1,0 +1,15 @@
+export const GOOGLE_FONTS = [
+  { name: 'Inter', family: 'Inter, system-ui, sans-serif' },
+  { name: 'Roboto', family: 'Roboto, sans-serif' },
+  { name: 'Open Sans', family: 'Open Sans, sans-serif' },
+  { name: 'Lato', family: 'Lato, sans-serif' },
+  { name: 'Montserrat', family: 'Montserrat, sans-serif' },
+  { name: 'Playfair Display', family: 'Playfair Display, serif' },
+  { name: 'Poppins', family: 'Poppins, sans-serif' },
+  { name: 'Raleway', family: 'Raleway, sans-serif' },
+  { name: 'Merriweather', family: 'Merriweather, serif' },
+  { name: 'Oswald', family: 'Oswald, sans-serif' },
+  { name: 'Bebas Neue', family: 'Bebas Neue, sans-serif' },
+  { name: 'Pacifico', family: 'Pacifico, cursive' },
+  { name: 'Dancing Script', family: 'Dancing Script, cursive' },
+] as const;

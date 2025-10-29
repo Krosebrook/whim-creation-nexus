@@ -133,11 +133,11 @@ const ElementTools: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Text Tools */}
-      <Card className="border-none shadow-lg bg-gradient-to-br from-white to-green-50/30">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-sm flex items-center text-gray-700">
+      <Card className="border-none shadow-md md:shadow-lg bg-gradient-to-br from-card to-accent/20">
+        <CardHeader className="pb-3 md:pb-4">
+          <CardTitle className="text-xs md:text-sm flex items-center text-foreground">
             <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
               <Type className="w-4 h-4 text-green-600" />
             </div>
@@ -164,9 +164,9 @@ const ElementTools: React.FC = () => {
       </Card>
 
       {/* Shape Tools */}
-      <Card className="border-none shadow-lg bg-gradient-to-br from-white to-purple-50/30">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-sm flex items-center text-gray-700">
+      <Card className="border-none shadow-md md:shadow-lg bg-gradient-to-br from-card to-accent/20">
+        <CardHeader className="pb-3 md:pb-4">
+          <CardTitle className="text-xs md:text-sm flex items-center text-foreground">
             <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
               <Square className="w-4 h-4 text-purple-600" />
             </div>
@@ -174,7 +174,7 @@ const ElementTools: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 md:gap-2">
             {[
               { type: 'rectangle', icon: Square, label: 'Rectangle' },
               { type: 'circle', icon: Circle, label: 'Circle' },
@@ -206,9 +206,9 @@ const ElementTools: React.FC = () => {
       </Card>
 
       {/* Pattern Tools */}
-      <Card className="border-none shadow-lg bg-gradient-to-br from-white to-orange-50/30">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-sm flex items-center text-gray-700">
+      <Card className="border-none shadow-md md:shadow-lg bg-gradient-to-br from-card to-accent/20">
+        <CardHeader className="pb-3 md:pb-4">
+          <CardTitle className="text-xs md:text-sm flex items-center text-foreground">
             <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
               <Palette className="w-4 h-4 text-orange-600" />
             </div>
@@ -240,9 +240,9 @@ const ElementTools: React.FC = () => {
       </Card>
 
       {/* Image Tools */}
-      <Card className="border-none shadow-lg bg-gradient-to-br from-white to-blue-50/30">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-sm flex items-center text-gray-700">
+      <Card className="border-none shadow-md md:shadow-lg bg-gradient-to-br from-card to-accent/20">
+        <CardHeader className="pb-3 md:pb-4">
+          <CardTitle className="text-xs md:text-sm flex items-center text-foreground">
             <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
               <Image className="w-4 h-4 text-blue-600" />
             </div>

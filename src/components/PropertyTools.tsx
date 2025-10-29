@@ -8,21 +8,7 @@ import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Settings, Trash2, Edit3, Palette, RotateCw, Eye, Type } from 'lucide-react';
 import { useDesign } from '@/contexts/DesignContext';
-
-const GOOGLE_FONTS = [
-  { name: 'Roboto', family: 'Roboto, sans-serif' },
-  { name: 'Open Sans', family: 'Open Sans, sans-serif' },
-  { name: 'Lato', family: 'Lato, sans-serif' },
-  { name: 'Montserrat', family: 'Montserrat, sans-serif' },
-  { name: 'Playfair Display', family: 'Playfair Display, serif' },
-  { name: 'Poppins', family: 'Poppins, sans-serif' },
-  { name: 'Raleway', family: 'Raleway, sans-serif' },
-  { name: 'Merriweather', family: 'Merriweather, serif' },
-  { name: 'Oswald', family: 'Oswald, sans-serif' },
-  { name: 'Bebas Neue', family: 'Bebas Neue, sans-serif' },
-  { name: 'Pacifico', family: 'Pacifico, cursive' },
-  { name: 'Dancing Script', family: 'Dancing Script, cursive' },
-];
+import { GOOGLE_FONTS } from '@/constants/fonts';
 
 const PropertyTools: React.FC = () => {
   const { state, dispatch } = useDesign();
@@ -55,16 +41,16 @@ const PropertyTools: React.FC = () => {
   }
 
   return (
-    <Card className="border-none shadow-lg bg-gradient-to-br from-white to-indigo-50/30">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-sm flex items-center text-gray-700">
+    <Card className="border-none shadow-lg bg-gradient-to-br from-card to-accent/30">
+      <CardHeader className="pb-3 md:pb-4">
+        <CardTitle className="text-xs md:text-sm flex items-center text-foreground">
           <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center mr-3">
             <Edit3 className="w-4 h-4 text-indigo-600" />
           </div>
           Element Properties
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4 md:space-y-6">
         {selectedElement.type === 'text' && (
           <div className="space-y-4">
             <div>

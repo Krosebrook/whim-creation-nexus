@@ -79,7 +79,7 @@ const DesignTools: React.FC<DesignToolsProps> = ({ category, onBack }) => {
   ];
 
   return (
-    <div className="w-80 bg-white/95 backdrop-blur-md border-r border-gray-200/60 flex flex-col shadow-xl">
+    <div className="w-full md:w-80 lg:w-96 bg-white/95 backdrop-blur-md border-r border-border/60 flex flex-col shadow-xl overflow-hidden">
       {/* Header */}
       <ToolsHeader onBack={onBack} />
       

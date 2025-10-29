@@ -19,25 +19,24 @@ const DesignCanvas: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 bg-gradient-to-br from-slate-50 to-slate-100/60 relative overflow-hidden">
+    <div className="flex-1 bg-gradient-to-br from-slate-50 to-slate-100/60 relative overflow-hidden flex flex-col">
       <CanvasHeader elementCount={state.elements.length} />
 
       {/* Canvas Area */}
-      <div className="p-8 h-full flex items-center justify-center">
+      <div className="flex-1 p-2 sm:p-4 md:p-6 lg:p-8 flex items-center justify-center overflow-auto">
         <div
-          className="bg-white relative shadow-2xl rounded-2xl border border-gray-200/60 overflow-hidden"
+          className="bg-background relative shadow-2xl rounded-xl md:rounded-2xl border border-border/60 overflow-hidden w-full max-w-[95vw] md:max-w-4xl aspect-[4/3]"
           onClick={handleCanvasClick}
           style={{ 
-            width: '800px',
-            height: '600px',
-            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.08) 1px, transparent 0)',
+            maxHeight: 'calc(100vh - 120px)',
+            backgroundImage: 'radial-gradient(circle at 1px 1px, hsl(var(--primary) / 0.08) 1px, transparent 0)',
             backgroundSize: '24px 24px'
           }}
         >
           {/* Canvas Guidelines */}
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-1/2 left-0 right-0 h-px bg-indigo-200/50"></div>
-            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-indigo-200/50"></div>
+            <div className="absolute top-1/2 left-0 right-0 h-px bg-primary/20"></div>
+            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-primary/20"></div>
           </div>
 
           {/* Elements */}
